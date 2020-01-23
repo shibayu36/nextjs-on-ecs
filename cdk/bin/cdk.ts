@@ -4,4 +4,4 @@ import * as cdk from "@aws-cdk/core";
 import { VpcStack } from "../lib/stacks/vpc-stack";
 
 const app = new cdk.App();
-new VpcStack(app, "CdkStack");
+new VpcStack(app, "VpcStack");
