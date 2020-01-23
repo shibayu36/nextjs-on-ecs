@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-import 'source-map-support/register';
-import * as cdk from '@aws-cdk/core';
-import { CdkStack } from '../lib/cdk-stack';
+import "source-map-support/register";
+import * as cdk from "@aws-cdk/core";
+import { VpcStack } from "../lib/stacks/vpc-stack";
 
 const app = new cdk.App();
-new CdkStack(app, 'CdkStack');
+new VpcStack(app, "CdkStack");
