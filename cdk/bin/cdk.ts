@@ -11,5 +11,6 @@ const securityGroupStack = new SecurityGroupStack(app, "SecurityGroupStack", {
   vpc: vpcStack.vpc
 });
 new NextServerStack(app, "NextServerStack", {
-  vpc: vpcStack.vpc
+  vpc: vpcStack.vpc,
+  nextServerAlbSg: securityGroupStack.nextServerAlbSg
 });
