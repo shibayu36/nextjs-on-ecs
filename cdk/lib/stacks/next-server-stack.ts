@@ -3,6 +3,7 @@ import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
 import * as ecr from "@aws-cdk/aws-ecr";
 import * as elb from "@aws-cdk/aws-elasticloadbalancingv2";
+import { Duration } from "@aws-cdk/core";
 
 export interface NextServerStackProps {
   readonly vpc: ec2.IVpc;
@@ -22,6 +23,23 @@ export class NextServerStack extends cdk.Stack {
       vpc: props.vpc
     });
 
+    const targetGroup = new elb.ApplicationTargetGroup(
+      this,
+      "nextjs-on-ecs-server-target",
+      {
+        targetGroupName: "nextjs-on-ecs-server-target",
+        targetType: elb.TargetType.IP,
+        port: 80,
+        vpc: props.vpc,
+        healthCheck: {
+          healthyThresholdCount: 5,
+          interval: Duration.seconds(5),
+          timeout: Duration.seconds(3)
+        },
+        deregistrationDelay: Duration.seconds(30)
+      }
+    );
+
     const alb = new elb.ApplicationLoadBalancer(
       this,
       "nextjs-on-ecs-server-alb",
@@ -36,16 +54,6 @@ export class NextServerStack extends cdk.Stack {
       port: 80,
       open: true
     });
-    const targetGroup = new elb.ApplicationTargetGroup(
-      this,
-      "nextjs-on-ecs-server-target",
-      {
-        targetGroupName: "nextjs-on-ecs-server-target",
-        targetType: elb.TargetType.IP,
-        port: 80,
-        vpc: props.vpc
-      }
-    );
     listener.addTargetGroups("nextjs-on-ecs-server-target-default", {
       targetGroups: [targetGroup]
     });
