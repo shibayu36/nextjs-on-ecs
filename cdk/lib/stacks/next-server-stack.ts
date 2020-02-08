@@ -11,6 +11,8 @@ export interface NextServerStackProps {
 }
 
 export class NextServerStack extends cdk.Stack {
+  public readonly nextServerAlb: elb.IApplicationLoadBalancer;
+
   constructor(
     scope: cdk.Construct,
     id: string,
@@ -40,7 +42,7 @@ export class NextServerStack extends cdk.Stack {
       }
     );
 
-    const alb = new elb.ApplicationLoadBalancer(
+    this.nextServerAlb = new elb.ApplicationLoadBalancer(
       this,
       "nextjs-on-ecs-server-alb",
       {
@@ -50,10 +52,13 @@ export class NextServerStack extends cdk.Stack {
         securityGroup: props.nextServerAlbSg
       }
     );
-    const listener = alb.addListener("nextjs-on-ecs-server-alb-listener", {
-      port: 80,
-      open: true
-    });
+    const listener = this.nextServerAlb.addListener(
+      "nextjs-on-ecs-server-alb-listener",
+      {
+        port: 80,
+        open: true
+      }
+    );
     listener.addTargetGroups("nextjs-on-ecs-server-target-default", {
       targetGroups: [targetGroup]
     });
