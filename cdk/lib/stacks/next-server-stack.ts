@@ -59,7 +59,8 @@ export class NextServerStack extends cdk.Stack {
     });
 
     const repository = new ecr.Repository(this, "nextjs-on-ecs-server-ecr", {
-      repositoryName: "nextjs-on-ecs-server"
+      repositoryName: "nextjs-on-ecs-server",
+      removalPolicy: cdk.RemovalPolicy.DESTROY
     });
   }
 }
