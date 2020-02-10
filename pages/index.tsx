@@ -1,7 +1,7 @@
-import * as React from 'react'
-import Link from 'next/link'
-import Layout from '../components/Layout'
-import { NextPage } from 'next'
+import * as React from "react";
+import Link from "next/link";
+import Layout from "../components/Layout";
+import { NextPage } from "next";
 
 const IndexPage: NextPage = () => {
   return (
@@ -13,7 +13,7 @@ const IndexPage: NextPage = () => {
         </Link>
       </p>
     </Layout>
-  )
-}
+  );
+};
 
-export default IndexPage
+export default IndexPage;

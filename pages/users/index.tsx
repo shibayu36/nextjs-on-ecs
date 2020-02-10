@@ -1,15 +1,15 @@
-import { NextPage } from 'next'
-import Link from 'next/link'
+import { NextPage } from "next";
+import Link from "next/link";
 
-import Layout from '../../components/Layout'
-import List from '../../components/List'
-import { User } from '../../interfaces'
-import { sampleFetchWrapper } from '../../utils/sample-api'
+import Layout from "../../components/Layout";
+import List from "../../components/List";
+import { User } from "../../interfaces";
+import { sampleFetchWrapper } from "../../utils/sample-api";
 
 type Props = {
-  items: User[]
-  pathname: string
-}
+  items: User[];
+  pathname: string;
+};
 
 const WithInitialProps: NextPage<Props> = ({ items, pathname }) => (
   <Layout title="Users List | Next.js + TypeScript Example">
@@ -25,7 +25,7 @@ const WithInitialProps: NextPage<Props> = ({ items, pathname }) => (
       </Link>
     </p>
   </Layout>
-)
+);
 
 WithInitialProps.getInitialProps = async ({ pathname }) => {
   // Example for including initial props in a Next.js function component page.
@@ -34,7 +34,7 @@ WithInitialProps.getInitialProps = async ({ pathname }) => {
   const apiBase = process.browser ? "" : "http://localhost:3000";
   const items: User[] = await sampleFetchWrapper(`${apiBase}/api/users`);
 
-  return { items, pathname }
-}
+  return { items, pathname };
+};
 
-export default WithInitialProps
+export default WithInitialProps;
