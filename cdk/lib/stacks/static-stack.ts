@@ -40,6 +40,7 @@ export class StaticStack extends cdk.Stack {
       this,
       "nextjs-on-ecs-cloudfront",
       {
+        defaultRootObject: "",
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.ALLOW_ALL,
         originConfigs: [
           {
