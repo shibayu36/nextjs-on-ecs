@@ -13,11 +13,12 @@ type Props = {
 
 class InitialPropsDetail extends React.Component<Props> {
   static getInitialProps = async ({ query }: NextPageContext) => {
+    const apiBase = process.browser ? "" : "http://localhost:3000";
     try {
       const { id } = query
       const item = await sampleFetchWrapper(
-        `http://localhost:3000/api/users/${Array.isArray(id) ? id[0] : id}`
-      )
+        `${apiBase}/api/users/${Array.isArray(id) ? id[0] : id}`
+      );
       return { item }
     } catch (err) {
       return { errors: err.message }
