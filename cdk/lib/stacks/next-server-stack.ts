@@ -62,10 +62,5 @@ export class NextServerStack extends cdk.Stack {
     listener.addTargetGroups("nextjs-on-ecs-server-target-default", {
       targetGroups: [targetGroup]
     });
-
-    const repository = new ecr.Repository(this, "nextjs-on-ecs-server-ecr", {
-      repositoryName: "nextjs-on-ecs-server",
-      removalPolicy: cdk.RemovalPolicy.DESTROY
-    });
   }
 }
