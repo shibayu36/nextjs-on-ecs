@@ -15,7 +15,9 @@ const securityGroupStack = new SecurityGroupStack(app, "SecurityGroupStack", {
 const repositoryStack = new RepositoryStack(app, "RepositoryStack", {});
 const nextServerStack = new NextServerStack(app, "NextServerStack", {
   vpc: vpcStack.vpc,
-  nextServerAlbSg: securityGroupStack.nextServerAlbSg
+  nextServerAlbSg: securityGroupStack.nextServerAlbSg,
+  nextServerEcsSg: securityGroupStack.nextServerEcsSg,
+  nextServerRepository: repositoryStack.nextServerRepository
 });
 const staticStack = new StaticStack(app, "StaticStack", {
   nextServerAlb: nextServerStack.nextServerAlb

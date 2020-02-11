@@ -1,13 +1,16 @@
 import * as cdk from "@aws-cdk/core";
 import * as ec2 from "@aws-cdk/aws-ec2";
 import * as ecs from "@aws-cdk/aws-ecs";
-import * as ecr from "@aws-cdk/aws-ecr";
 import * as elb from "@aws-cdk/aws-elasticloadbalancingv2";
+import * as ecr from "@aws-cdk/aws-ecr";
+import * as logs from "@aws-cdk/aws-logs";
 import { Duration } from "@aws-cdk/core";
 
 export interface NextServerStackProps {
   readonly vpc: ec2.IVpc;
-  readonly nextServerAlbSg: ec2.SecurityGroup;
+  readonly nextServerAlbSg: ec2.ISecurityGroup;
+  readonly nextServerEcsSg: ec2.ISecurityGroup;
+  readonly nextServerRepository: ecr.IRepository;
 }
 
 export class NextServerStack extends cdk.Stack {
@@ -25,6 +28,51 @@ export class NextServerStack extends cdk.Stack {
       vpc: props.vpc
     });
 
+    const nextServerLogGroup = new logs.LogGroup(
+      this,
+      "nextjs-on-ecs-server-log-group",
+      {
+        logGroupName: "nextjs-on-ecs-server-log-group"
+      }
+    );
+
+    const nextServerTaskDef = new ecs.FargateTaskDefinition(
+      this,
+      "nextjs-on-ecs-server-taskdef",
+      {
+        family: "nextjs-on-ecs-server-taskdef"
+      }
+    );
+    const nextServerContainer = nextServerTaskDef.addContainer(
+      "nextjs-on-ecs-server-container",
+      {
+        image: ecs.ContainerImage.fromEcrRepository(props.nextServerRepository),
+        logging: new ecs.AwsLogDriver({
+          logGroup: nextServerLogGroup,
+          streamPrefix: "server"
+        })
+      }
+    );
+    nextServerContainer.addPortMappings({
+      containerPort: 3000
+    });
+
+    const nextServerService = new ecs.FargateService(
+      this,
+      "nextjs-on-ecs-server-service",
+      {
+        serviceName: "nextjs-on-ecs-server-service",
+        cluster: cluster,
+        taskDefinition: nextServerTaskDef,
+        desiredCount: 1,
+        securityGroup: props.nextServerEcsSg,
+        vpcSubnets: {
+          subnetType: ec2.SubnetType.PUBLIC
+        },
+        assignPublicIp: true
+      }
+    );
+
     const targetGroup = new elb.ApplicationTargetGroup(
       this,
       "nextjs-on-ecs-server-target",
@@ -41,6 +89,7 @@ export class NextServerStack extends cdk.Stack {
         deregistrationDelay: Duration.seconds(30)
       }
     );
+    targetGroup.addTarget(nextServerService);
 
     this.nextServerAlb = new elb.ApplicationLoadBalancer(
       this,

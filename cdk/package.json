@@ -28,6 +28,7 @@
     "@aws-cdk/aws-ecs-patterns": "^1.23.0",
     "@aws-cdk/aws-elasticloadbalancingv2": "^1.23.0",
     "@aws-cdk/aws-iam": "^1.23.0",
+    "@aws-cdk/aws-logs": "^1.23.0",
     "@aws-cdk/aws-s3": "^1.23.0",
     "@aws-cdk/core": "^1.23.0",
     "source-map-support": "^0.5.16"
