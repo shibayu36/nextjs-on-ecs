@@ -1,6 +1,10 @@
 {
-  "name": "with-typescript",
+  "name": "nextjs-on-ecs",
   "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "cdk"
+  ],
   "scripts": {
     "dev": "next",
     "build": "next build",
