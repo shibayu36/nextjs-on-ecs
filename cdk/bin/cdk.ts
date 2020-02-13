@@ -8,6 +8,12 @@ import { StaticStack } from "../lib/stacks/static-stack";
 import { RepositoryStack } from "../lib/stacks/repository-stack";
 
 const app = new cdk.App();
+
+const applicationVersion = app.node.tryGetContext("application-version");
+if (applicationVersion === undefined) {
+  throw new Error(`no application-version found`);
+}
+
 const vpcStack = new VpcStack(app, "VpcStack");
 const securityGroupStack = new SecurityGroupStack(app, "SecurityGroupStack", {
   vpc: vpcStack.vpc
@@ -17,7 +23,8 @@ const nextServerStack = new NextServerStack(app, "NextServerStack", {
   vpc: vpcStack.vpc,
   nextServerAlbSg: securityGroupStack.nextServerAlbSg,
   nextServerEcsSg: securityGroupStack.nextServerEcsSg,
-  nextServerRepository: repositoryStack.nextServerRepository
+  nextServerRepository: repositoryStack.nextServerRepository,
+  applicationVersion: applicationVersion
 });
 const staticStack = new StaticStack(app, "StaticStack", {
   nextServerAlb: nextServerStack.nextServerAlb

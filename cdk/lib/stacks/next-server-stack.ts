@@ -11,6 +11,7 @@ export interface NextServerStackProps {
   readonly nextServerAlbSg: ec2.ISecurityGroup;
   readonly nextServerEcsSg: ec2.ISecurityGroup;
   readonly nextServerRepository: ecr.IRepository;
+  readonly applicationVersion: string;
 }
 
 export class NextServerStack extends cdk.Stack {
@@ -46,7 +47,10 @@ export class NextServerStack extends cdk.Stack {
     const nextServerContainer = nextServerTaskDef.addContainer(
       "nextjs-on-ecs-server-container",
       {
-        image: ecs.ContainerImage.fromEcrRepository(props.nextServerRepository),
+        image: ecs.ContainerImage.fromEcrRepository(
+          props.nextServerRepository,
+          props.applicationVersion
+        ),
         logging: new ecs.AwsLogDriver({
           logGroup: nextServerLogGroup,
           streamPrefix: "server"
