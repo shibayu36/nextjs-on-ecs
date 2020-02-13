@@ -6,13 +6,13 @@ import { NextServerStack } from "../lib/stacks/next-server-stack";
 import { SecurityGroupStack } from "../lib/stacks/security-group-stack";
 import { StaticStack } from "../lib/stacks/static-stack";
 import { RepositoryStack } from "../lib/stacks/repository-stack";
+import { execSync } from "child_process";
 
 const app = new cdk.App();
 
-const applicationVersion = app.node.tryGetContext("application-version");
-if (applicationVersion === undefined) {
-  throw new Error(`no application-version found`);
-}
+const applicationVersion =
+  app.node.tryGetContext("application-version") ??
+  execSync("git rev-parse --short HEAD").toString();
 
 const vpcStack = new VpcStack(app, "VpcStack");
 const securityGroupStack = new SecurityGroupStack(app, "SecurityGroupStack", {
