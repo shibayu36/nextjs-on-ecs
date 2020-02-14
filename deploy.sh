@@ -15,4 +15,5 @@ docker cp ${CONTAINER_ID}:/app/.next ./dist/
 docker rm -v ${CONTAINER_ID}
 aws s3 sync ./dist/.next/static s3://nextjs-on-ecs-static-bucket/_next/static
 
-ecspresso --config config.yaml deploy
+# Nextのサーバが動くECSを更新
+yarn workspace cdk run cdk deploy --context application-version=$REVISION NextServerStack
