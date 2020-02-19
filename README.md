@@ -25,5 +25,5 @@ Then, visit your CloudFront URL.
 ## Deploy
 
 ```
-$ export ECR_BASE=<your ecr base>; ./deploy.sh
+$ ECR_BASE=<your ecr base> ./deploy.sh
 ```
