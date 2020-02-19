@@ -12,6 +12,7 @@
 ## Bootstrap
 
 ```
+$ yarn install
 $ yarn workspace cdk run cdk bootstrap
 $ yarn workspace cdk run cdk deploy VpcStack SecurityGroupStack RepositoryStack
 $ ECR_BASE=<your ecr base> ./build-image-and-push.sh
