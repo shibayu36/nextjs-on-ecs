@@ -20,7 +20,7 @@ FROM node:12-stretch-slim AS nextjs-on-ecs-server
 WORKDIR /app
 
 COPY --from=nextjs-on-ecs-server-builder /app/package.json /app/yarn.lock ./
-COPY --from=nextjs-on-ecs-server-builder /app/node_modules ./node_modules
+RUN --mount=type=cache,target=/home/node/.cache,id=yarn-cache,sharing=private,uid=1000 yarn install --pure-lockfile --production
 COPY --from=nextjs-on-ecs-server-builder /app/.next ./.next
 
 
