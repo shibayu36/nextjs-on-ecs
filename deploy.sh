@@ -3,7 +3,8 @@
 set -ex
 
 : ${REVISION:="$(git rev-parse --short HEAD)"}
-export REVISION;
+export REVISION
+export ECR_BASE
 
 ./build-image-and-push.sh
 
